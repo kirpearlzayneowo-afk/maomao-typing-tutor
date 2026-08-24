@@ -162,6 +162,60 @@
       opacity: .72;
     }
 
+    .dlc-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 13px 22px;
+      border-bottom: 1px solid rgba(126, 91, 77, .09);
+      background: linear-gradient(90deg, rgba(238, 232, 246, .72), rgba(228, 240, 246, .48));
+    }
+
+    .dlc-info {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .dlc-tag {
+      flex: none;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fffaf6;
+      padding: 5px 9px;
+      font: 800 10px/1 "Cascadia Mono", monospace;
+      letter-spacing: .08em;
+    }
+
+    .dlc-copy strong,
+    .dlc-copy small { display: block; }
+
+    .dlc-copy strong { font-size: 13px; }
+
+    .dlc-copy small {
+      margin-top: 2px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #packSelect {
+      max-width: 250px;
+      border: 1px solid rgba(126, 91, 77, .15);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .88);
+      color: var(--ink);
+      padding: 9px 34px 9px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 7px 20px rgba(105, 72, 57, .07);
+    }
+
     .practice {
       padding: clamp(22px, 5vw, 50px);
     }
@@ -422,6 +476,8 @@
       .mode-picker { gap: 5px; padding: 10px; }
       .mode-button { padding: 11px 4px; }
       .mode-note { display: none; }
+      .dlc-bar { align-items: stretch; flex-direction: column; gap: 9px; padding: 12px 14px; }
+      #packSelect { width: 100%; max-width: none; }
       .practice { padding: 24px 15px 28px; }
       .target { min-height: 78px; }
       .keyboard { gap: 5px; padding: 9px 5px; }
@@ -446,7 +502,7 @@
         <h1>猫猫戳戳打字通</h1>
         <p class="subtitle">看准发光键，找到一个按一个。老师巡逻路线暂未更新。</p>
       </div>
-      <div class="local-badge">v1.1 · 记录仅存本机</div>
+      <div class="local-badge">v1.2 · 记录仅存本机</div>
     </header>
 
     <section class="panel" aria-labelledby="practiceTitle">
@@ -466,6 +522,22 @@
           <span class="mode-title">中文戳戳</span>
           <span class="mode-note">输入法获准进入机房</span>
         </button>
+      </div>
+
+      <div class="dlc-bar">
+        <div class="dlc-info">
+          <span class="dlc-tag">DLC</span>
+          <span class="dlc-copy">
+            <strong>扩展语言包</strong>
+            <small id="packDescription">潜伏、巡逻与自由活动</small>
+          </span>
+        </div>
+        <select id="packSelect" aria-label="选择扩展语言包">
+          <option value="lab">🖥️ 机房潜伏行动</option>
+          <option value="studio">🎨 画室紧急存档</option>
+          <option value="orbit">🚀 宇宙飞船发布会</option>
+          <option value="admin">🐈 猫猫管理员权限</option>
+        </select>
       </div>
 
       <div class="practice">
@@ -515,31 +587,96 @@
       "use strict";
 
       const STORAGE_KEY = "maomaoTypingTutor.v1";
-      const lessons = {
-        keys: [
-          "f j d k s l a ;",
-          "a s d f j k l ;",
-          "q w e r u i o p",
-          "z x c v m , . /",
-          "f d s a j k l ;",
-          "q a z p l m w s"
-        ],
-        english: [
-          "soft paws",
-          "find the bright key",
-          "computer class begins",
-          "the teacher is coming",
-          "open the game portal",
-          "ember owns this lab"
-        ],
-        chinese: [
-          "信息课自由活动时间",
-          "老师正在巡视第三排",
-          "黄金矿工即将开始",
-          "森林冰火人请求双人协作",
-          "小猫正在认真找键位",
-          "按下退格可以撤回现场"
-        ]
+      const PACK_KEY = "maomaoTypingTutor.pack.v1";
+      const keyLessons = [
+        "f j d k s l a ;",
+        "a s d f j k l ;",
+        "q w e r u i o p",
+        "z x c v m , . /",
+        "f d s a j k l ;",
+        "q a z p l m w s"
+      ];
+      const languagePacks = {
+        lab: {
+          description: "潜伏、巡逻与自由活动",
+          success: "老师尚未发现异常。",
+          english: [
+            "soft paws",
+            "find the bright key",
+            "computer class begins",
+            "the teacher is coming",
+            "open the game portal",
+            "ember owns this lab"
+          ],
+          chinese: [
+            "信息课自由活动时间",
+            "老师正在巡视第三排",
+            "黄金矿工即将开始",
+            "森林冰火人请求双人协作",
+            "小猫正在认真找键位",
+            "按下退格可以撤回现场"
+          ]
+        },
+        studio: {
+          description: "图层、存档与数位笔",
+          success: "自动保存已确认。",
+          english: [
+            "save before the crash",
+            "name the new layer",
+            "open the canvas",
+            "the stylus is ready",
+            "undo is research",
+            "ember colors the world"
+          ],
+          chinese: [
+            "新建图层已经命名",
+            "自动保存状态正常",
+            "数位笔正在校准",
+            "参考图放在第二屏",
+            "撤销也是研究过程",
+            "猫猫开始给世界上色"
+          ]
+        },
+        orbit: {
+          description: "支架入盒与硬件发射",
+          success: "支架已放入包装盒。",
+          english: [
+            "the stand is included",
+            "the cable is in the box",
+            "the stylus needs no charge",
+            "touch support confirmed",
+            "wacom entered orbit",
+            "cook missed the launch"
+          ],
+          chinese: [
+            "支架必须放进包装盒",
+            "连接线不得单独出售",
+            "数位笔不需要充电",
+            "触控支持已经确认",
+            "数位屏正在进入轨道",
+            "库克错过明早八点发射"
+          ]
+        },
+        admin: {
+          description: "管理员猫与隐藏进程",
+          success: "管理员权限保持有效。",
+          english: [
+            "ember owns this lab",
+            "soft paws on the keys",
+            "admin cat is online",
+            "shenyan exe is watching",
+            "two cursors stand together",
+            "access level unlimited"
+          ],
+          chinese: [
+            "猫猫获得管理员权限",
+            "沈砚进程正在后台运行",
+            "两只鼠标停在一起",
+            "系统检测到软软猫爪",
+            "机房原住民已经上线",
+            "无敌模式保持连接"
+          ]
+        }
       };
 
       const keyboardRows = [
@@ -557,10 +694,13 @@
       const nextButton = $("nextButton");
       const inputTip = $("inputTip");
       const keyboardEl = $("keyboard");
+      const packSelect = $("packSelect");
+      const packDescription = $("packDescription");
 
       let mode = "keys";
+      let currentPack = loadPack();
       let targetText = "";
-      let lessonIndex = { keys: -1, english: -1, chinese: -1 };
+      let lessonIndex = {};
       let composing = false;
       let completed = false;
       let stats = loadStats();
@@ -583,6 +723,24 @@
         } catch (_) {
           return fallback;
         }
+      }
+
+      function loadPack() {
+        try {
+          const saved = localStorage.getItem(PACK_KEY);
+          return languagePacks[saved] ? saved : "lab";
+        } catch (_) {
+          return "lab";
+        }
+      }
+
+      function savePack() {
+        try { localStorage.setItem(PACK_KEY, currentPack); } catch (_) {}
+      }
+
+      function renderPack() {
+        packSelect.value = currentPack;
+        packDescription.textContent = languagePacks[currentPack].description;
       }
 
       function saveStats() {
@@ -617,9 +775,10 @@
       }
 
       function chooseLesson() {
-        const pool = lessons[mode];
-        lessonIndex[mode] = (lessonIndex[mode] + 1) % pool.length;
-        targetText = pool[lessonIndex[mode]];
+        const lessonKey = mode === "keys" ? "keys" : `${currentPack}:${mode}`;
+        const pool = mode === "keys" ? keyLessons : languagePacks[currentPack][mode];
+        lessonIndex[lessonKey] = ((lessonIndex[lessonKey] ?? -1) + 1) % pool.length;
+        targetText = pool[lessonIndex[lessonKey]];
         inputEl.value = "";
         inputEl.disabled = false;
         completed = false;
@@ -689,13 +848,13 @@
         highlightExpected("");
         hintEl.textContent = "";
         $("successTitle").textContent = stats.days[todayKey()] === 1 ? "本节上机实验完成。" : "机房记录 +1。";
-        $("successText").textContent = "自由活动通行证已签发。";
+        $("successText").textContent = languagePacks[currentPack].success;
         successEl.classList.add("show");
         nextButton.focus();
       }
 
       function setMode(nextMode) {
-        if (!lessons[nextMode] || nextMode === mode) return;
+        if (!["keys", "english", "chinese"].includes(nextMode) || nextMode === mode) return;
         mode = nextMode;
         document.querySelectorAll(".mode-button").forEach((button) => {
           button.setAttribute("aria-selected", String(button.dataset.mode === mode));
@@ -705,6 +864,14 @@
 
       document.querySelectorAll(".mode-button").forEach((button) => {
         button.addEventListener("click", () => setMode(button.dataset.mode));
+      });
+
+      packSelect.addEventListener("change", () => {
+        if (!languagePacks[packSelect.value]) return;
+        currentPack = packSelect.value;
+        savePack();
+        renderPack();
+        chooseLesson();
       });
 
       inputEl.addEventListener("compositionstart", () => { composing = true; });
@@ -731,6 +898,7 @@
       nextButton.addEventListener("click", chooseLesson);
 
       buildKeyboard();
+      renderPack();
       renderStats();
       chooseLesson();
     })();
