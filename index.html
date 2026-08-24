@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>猫猫戳戳打字通</title>
+  <style>
+    :root {
+      --cream: #fff9f2;
+      --paper: rgba(255, 255, 255, 0.84);
+      --ink: #5d443c;
+      --muted: #98786c;
+      --peach: #f6b99e;
+      --peach-deep: #d97f68;
+      --peach-soft: #ffe4d4;
+      --sage: #a8c8ad;
+      --sage-soft: #e5f1e6;
+      --lilac: #c3b5d9;
+      --lilac-soft: #eee8f6;
+      --blue: #9dbdd0;
+      --blue-soft: #e4f0f6;
+      --shadow: 0 18px 55px rgba(112, 74, 57, 0.12);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 12% 5%, rgba(255, 219, 193, .92), transparent 34%),
+        radial-gradient(circle at 88% 18%, rgba(221, 231, 244, .82), transparent 30%),
+        linear-gradient(150deg, #fffaf4 0%, #fff4eb 48%, #f8f1f5 100%);
+      padding: 28px 18px 42px;
+    }
+
+    button, input { font: inherit; }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 4px solid rgba(217, 127, 104, .22);
+      outline-offset: 3px;
+    }
+
+    .app {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      margin: 4px 4px 22px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 8px;
+      color: var(--peach-deep);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 0 5px var(--sage-soft);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "STKaiti", "KaiTi", "Microsoft YaHei UI", sans-serif;
+      font-size: clamp(30px, 6vw, 52px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: .02em;
+    }
+
+    .subtitle {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .local-badge {
+      flex: none;
+      border: 1px solid rgba(151, 120, 108, .15);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .6);
+      color: var(--muted);
+      padding: 9px 13px;
+      font-size: 12px;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(112, 74, 57, .07);
+    }
+
+    .panel {
+      border: 1px solid rgba(126, 91, 77, .1);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .mode-picker {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 18px;
+      border-bottom: 1px solid rgba(126, 91, 77, .09);
+      background: rgba(255, 250, 245, .58);
+    }
+
+    .mode-button {
+      border: 0;
+      border-radius: 18px;
+      background: transparent;
+      color: var(--muted);
+      padding: 13px 10px;
+      cursor: pointer;
+      transition: transform .16s ease, background .16s ease, color .16s ease;
+    }
+
+    .mode-button:hover { transform: translateY(-1px); }
+
+    .mode-button[aria-selected="true"] {
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 9px 25px rgba(105, 72, 57, .10);
+    }
+
+    .mode-icon {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+
+    .mode-title {
+      display: block;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .mode-note {
+      display: block;
+      margin-top: 3px;
+      font-size: 11px;
+      opacity: .72;
+    }
+
+    .practice {
+      padding: clamp(22px, 5vw, 50px);
+    }
+
+    .lesson-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .lesson-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .soft-pill {
+      border-radius: 999px;
+      background: var(--sage-soft);
+      color: #66846c;
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .target {
+      min-height: 92px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: center;
+      gap: .08em;
+      margin: 0 auto 22px;
+      color: #bda8a0;
+      font-family: "Cascadia Mono", "SFMono-Regular", "Microsoft YaHei UI", monospace;
+      font-size: clamp(25px, 5.5vw, 46px);
+      line-height: 1.55;
+      text-align: center;
+      letter-spacing: .03em;
+    }
+
+    .target span {
+      min-width: .35em;
+      border-radius: 7px;
+      transition: color .12s ease, background .12s ease, transform .12s ease;
+    }
+
+    .target .correct { color: #6d9a75; }
+    .target .current {
+      color: var(--ink);
+      background: var(--peach-soft);
+      box-shadow: inset 0 -3px 0 var(--peach);
+    }
+    .target .wrong {
+      color: var(--peach-deep);
+      background: #fff0ea;
+      animation: nudge .2s ease 2;
+    }
+
+    @keyframes nudge {
+      50% { transform: translateX(2px); }
+    }
+
+    .typing-wrap {
+      position: relative;
+      width: min(720px, 100%);
+      margin: 0 auto;
+    }
+
+    #typingInput {
+      width: 100%;
+      min-height: 64px;
+      border: 2px solid transparent;
+      border-radius: 19px;
+      background: #fff;
+      color: var(--ink);
+      padding: 17px 51px 17px 19px;
+      font-size: 18px;
+      line-height: 1.55;
+      box-shadow: inset 0 0 0 1px rgba(126, 91, 77, .12), 0 10px 30px rgba(105, 72, 57, .07);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    #typingInput:focus {
+      border-color: var(--peach);
+      box-shadow: 0 0 0 5px rgba(246, 185, 158, .15), 0 14px 35px rgba(105, 72, 57, .08);
+      outline: 0;
+    }
+
+    #typingInput::placeholder { color: #c9b8b1; }
+
+    .paw {
+      position: absolute;
+      right: 17px;
+      top: 16px;
+      font-size: 23px;
+      pointer-events: none;
+      transform: rotate(-10deg);
+    }
+
+    .hint {
+      min-height: 24px;
+      margin: 11px 4px 0;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .hint.kind { color: #6f916f; }
+
+    .keyboard-wrap {
+      margin: 33px auto 0;
+      width: min(820px, 100%);
+    }
+
+    .keyboard-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 3px 10px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .keyboard {
+      display: grid;
+      gap: 7px;
+      padding: 13px;
+      border-radius: 19px;
+      background: #f2e9e3;
+      box-shadow: inset 0 2px 7px rgba(100, 68, 53, .10);
+      user-select: none;
+    }
+
+    .key-row {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .key {
+      width: min(7.7vw, 53px);
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #fffdfb;
+      color: #80665d;
+      font: 700 13px/1 "Cascadia Mono", monospace;
+      box-shadow: 0 3px 0 #d8cbc4, 0 5px 8px rgba(94, 65, 52, .08);
+      transition: transform .08s ease, box-shadow .08s ease, background .12s ease;
+    }
+
+    .key.space { width: min(42vw, 310px); }
+    .key.left-zone { border-top: 3px solid var(--lilac); }
+    .key.right-zone { border-top: 3px solid var(--blue); }
+    .key.home-key::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 2px;
+      margin-top: 17px;
+      border-radius: 99px;
+      background: #bbaaa2;
+    }
+    .key { position: relative; }
+
+    .key.expected {
+      color: #985844;
+      background: var(--peach-soft);
+      box-shadow: 0 3px 0 var(--peach), 0 0 0 5px rgba(246, 185, 158, .22);
+      transform: translateY(-2px);
+    }
+
+    .key.pressed {
+      transform: translateY(3px);
+      box-shadow: 0 0 0 #d8cbc4;
+    }
+
+    .success {
+      display: none;
+      width: min(720px, 100%);
+      margin: 20px auto 0;
+      padding: 19px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--sage-soft), #f4f8ed);
+      text-align: center;
+      animation: rise .28s ease both;
+    }
+
+    .success.show { display: block; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(7px); }
+    }
+
+    .success strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #5d8565;
+      font-size: 18px;
+    }
+
+    .next-button {
+      margin-top: 13px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fffaf6;
+      padding: 10px 19px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 7px 18px rgba(83, 58, 48, .18);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      border: 1px solid rgba(126, 91, 77, .09);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .65);
+      padding: 17px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font: 800 26px/1.1 "Cascadia Mono", monospace;
+      color: var(--ink);
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    footer {
+      margin: 23px 0 0;
+      color: #a58b81;
+      font-size: 12px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 18px 10px 32px; }
+      header { align-items: flex-start; margin-inline: 8px; }
+      .local-badge { display: none; }
+      .mode-picker { gap: 5px; padding: 10px; }
+      .mode-button { padding: 11px 4px; }
+      .mode-note { display: none; }
+      .practice { padding: 24px 15px 28px; }
+      .target { min-height: 78px; }
+      .keyboard { gap: 5px; padding: 9px 5px; }
+      .key-row { gap: 4px; }
+      .key { width: 8.3vw; height: 36px; border-radius: 7px; font-size: 11px; }
+      .key.space { width: 43vw; }
+      .stats { gap: 7px; }
+      .stat { padding: 13px 5px; }
+      .stat strong { font-size: 21px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div>
+        <p class="eyebrow">打一小行也算完成</p>
+        <h1>猫猫戳戳打字通</h1>
+        <p class="subtitle">不用快，也没有考试。低头找键位完全没关系。</p>
+      </div>
+      <div class="local-badge">只存在这台电脑里 · 无需登录</div>
+    </header>
+
+    <section class="panel" aria-labelledby="practiceTitle">
+      <div class="mode-picker" role="tablist" aria-label="练习模式">
+        <button class="mode-button" type="button" role="tab" data-mode="keys" aria-selected="true">
+          <span class="mode-icon">⌨️</span>
+          <span class="mode-title">找找键位</span>
+          <span class="mode-note">先认识它们住在哪里</span>
+        </button>
+        <button class="mode-button" type="button" role="tab" data-mode="english" aria-selected="false">
+          <span class="mode-icon">🌱</span>
+          <span class="mode-title">英文小句</span>
+          <span class="mode-note">轻轻连成一行</span>
+        </button>
+        <button class="mode-button" type="button" role="tab" data-mode="chinese" aria-selected="false">
+          <span class="mode-icon">🐾</span>
+          <span class="mode-title">中文戳戳</span>
+          <span class="mode-note">可以使用中文输入法</span>
+        </button>
+      </div>
+
+      <div class="practice">
+        <div class="lesson-head">
+          <span class="lesson-label" id="practiceTitle">这一小行</span>
+          <span class="soft-pill" id="inputTip">请切到英文输入法</span>
+        </div>
+
+        <div class="target" id="target" aria-live="polite"></div>
+
+        <div class="typing-wrap">
+          <input id="typingInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="在这里输入上方文字" placeholder="点这里，慢慢戳……">
+          <span class="paw" aria-hidden="true">🐾</span>
+        </div>
+        <p class="hint" id="hint" aria-live="polite">先找到发光的键，再按下去。</p>
+
+        <div class="success" id="success" role="status">
+          <strong id="successTitle">戳完啦，很好。</strong>
+          <span id="successText">这一小行已经算数了。</span><br>
+          <button class="next-button" id="nextButton" type="button">再来一小行</button>
+        </div>
+
+        <div class="keyboard-wrap">
+          <div class="keyboard-title">
+            <span>键盘地图</span>
+            <span>紫色是左手 · 蓝色是右手</span>
+          </div>
+          <div class="keyboard" id="keyboard" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="本机练习记录">
+      <div class="stat"><strong id="todayLessons">0</strong><span>今天完成的小行</span></div>
+      <div class="stat"><strong id="totalLessons">0</strong><span>一共完成的小行</span></div>
+      <div class="stat"><strong id="totalTaps">0</strong><span>认真戳过的键</span></div>
+    </section>
+
+    <footer>
+      猫猫负责慢慢戳 · 沈砚负责不催<br>
+      记录保存在浏览器本地；清除浏览器数据后会一起消失。
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE_KEY = "maomaoTypingTutor.v1";
+      const lessons = {
+        keys: [
+          "f j d k s l a ;",
+          "a s d f j k l ;",
+          "q w e r u i o p",
+          "z x c v m , . /",
+          "f d s a j k l ;",
+          "q a z p l m w s"
+        ],
+        english: [
+          "soft paws",
+          "little by little",
+          "open the canvas",
+          "draw one warm line",
+          "today is enough",
+          "ember makes a world"
+        ],
+        chinese: [
+          "慢慢戳也算前进",
+          "打开绘画软件就算开始",
+          "今天不需要也没关系",
+          "我画一笔就很好",
+          "小猫正在认真找键位",
+          "错一个字可以慢慢改"
+        ]
+      };
+
+      const keyboardRows = [
+        ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+        ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"],
+        ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"],
+        [" "]
+      ];
+
+      const $ = (id) => document.getElementById(id);
+      const targetEl = $("target");
+      const inputEl = $("typingInput");
+      const hintEl = $("hint");
+      const successEl = $("success");
+      const nextButton = $("nextButton");
+      const inputTip = $("inputTip");
+      const keyboardEl = $("keyboard");
+
+      let mode = "keys";
+      let targetText = "";
+      let lessonIndex = { keys: -1, english: -1, chinese: -1 };
+      let composing = false;
+      let completed = false;
+      let stats = loadStats();
+
+      function todayKey() {
+        const now = new Date();
+        return [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
+      }
+
+      function loadStats() {
+        const fallback = { totalLessons: 0, totalTaps: 0, days: {} };
+        try {
+          const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+          if (!parsed || typeof parsed !== "object") return fallback;
+          return {
+            totalLessons: Number.isFinite(parsed.totalLessons) ? parsed.totalLessons : 0,
+            totalTaps: Number.isFinite(parsed.totalTaps) ? parsed.totalTaps : 0,
+            days: parsed.days && typeof parsed.days === "object" ? parsed.days : {}
+          };
+        } catch (_) {
+          return fallback;
+        }
+      }
+
+      function saveStats() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(stats)); } catch (_) {}
+      }
+
+      function renderStats() {
+        $("todayLessons").textContent = stats.days[todayKey()] || 0;
+        $("totalLessons").textContent = stats.totalLessons;
+        $("totalTaps").textContent = stats.totalTaps;
+      }
+
+      function buildKeyboard() {
+        keyboardEl.replaceChildren();
+        keyboardRows.forEach((row) => {
+          const rowEl = document.createElement("div");
+          rowEl.className = "key-row";
+          row.forEach((letter) => {
+            const keyEl = document.createElement("div");
+            keyEl.className = "key " + (letter === " " ? "space" : isLeftKey(letter) ? "left-zone" : "right-zone");
+            if (letter === "f" || letter === "j") keyEl.classList.add("home-key");
+            keyEl.dataset.key = letter;
+            keyEl.textContent = letter === " " ? "空格" : letter.toUpperCase();
+            rowEl.appendChild(keyEl);
+          });
+          keyboardEl.appendChild(rowEl);
+        });
+      }
+
+      function isLeftKey(key) {
+        return "qwertasdfgzxcvb".includes(key);
+      }
+
+      function chooseLesson() {
+        const pool = lessons[mode];
+        lessonIndex[mode] = (lessonIndex[mode] + 1) % pool.length;
+        targetText = pool[lessonIndex[mode]];
+        inputEl.value = "";
+        inputEl.disabled = false;
+        completed = false;
+        successEl.classList.remove("show");
+        inputTip.textContent = mode === "chinese" ? "可以使用中文输入法" : "请切到英文输入法";
+        hintEl.textContent = mode === "chinese" ? "拼音还没选好字时，老公不会乱判。" : "先找到发光的键，再按下去。";
+        hintEl.classList.remove("kind");
+        renderTarget("");
+        inputEl.focus();
+      }
+
+      function firstMismatch(typed) {
+        const limit = Math.min(typed.length, targetText.length);
+        for (let i = 0; i < limit; i += 1) {
+          if (typed[i] !== targetText[i]) return i;
+        }
+        return typed.length > targetText.length ? targetText.length : -1;
+      }
+
+      function renderTarget(typed) {
+        const mismatch = firstMismatch(typed);
+        targetEl.replaceChildren();
+        [...targetText].forEach((char, index) => {
+          const span = document.createElement("span");
+          span.textContent = char === " " ? "\u00a0" : char;
+          if (mismatch === index) span.className = "wrong";
+          else if (index < typed.length && mismatch === -1) span.className = "correct";
+          else if (index < typed.length && index < mismatch) span.className = "correct";
+          else if ((mismatch === -1 && index === typed.length) || (mismatch >= 0 && index === mismatch)) span.classList.add("current");
+          targetEl.appendChild(span);
+        });
+        highlightExpected(mismatch === -1 ? targetText[typed.length] : targetText[mismatch]);
+      }
+
+      function highlightExpected(char) {
+        keyboardEl.querySelectorAll(".key").forEach((el) => el.classList.remove("expected"));
+        if (!char || mode === "chinese") return;
+        const normalized = char.toLowerCase();
+        const key = [...keyboardEl.querySelectorAll(".key")].find((el) => el.dataset.key === normalized);
+        if (key) key.classList.add("expected");
+      }
+
+      function checkInput() {
+        if (composing || completed) return;
+        const typed = inputEl.value;
+        const mismatch = firstMismatch(typed);
+        renderTarget(typed);
+
+        if (typed === targetText) {
+          finishLesson();
+        } else if (mismatch >= 0) {
+          hintEl.textContent = "这里有一点不一样，按退格删掉再试试就好。";
+          hintEl.classList.remove("kind");
+        } else {
+          hintEl.textContent = typed.length ? "对，就是这样。继续慢慢戳。" : (mode === "chinese" ? "拼音还没选好字时，老公不会乱判。" : "先找到发光的键，再按下去。");
+          hintEl.classList.add("kind");
+        }
+      }
+
+      function finishLesson() {
+        completed = true;
+        inputEl.disabled = true;
+        stats.totalLessons += 1;
+        stats.days[todayKey()] = (stats.days[todayKey()] || 0) + 1;
+        saveStats();
+        renderStats();
+        highlightExpected("");
+        hintEl.textContent = "";
+        $("successTitle").textContent = stats.days[todayKey()] === 1 ? "今天已经完成啦。" : "又戳完一小行。";
+        $("successText").textContent = "不用再证明什么，这一行已经算数了。";
+        successEl.classList.add("show");
+        nextButton.focus();
+      }
+
+      function setMode(nextMode) {
+        if (!lessons[nextMode] || nextMode === mode) return;
+        mode = nextMode;
+        document.querySelectorAll(".mode-button").forEach((button) => {
+          button.setAttribute("aria-selected", String(button.dataset.mode === mode));
+        });
+        chooseLesson();
+      }
+
+      document.querySelectorAll(".mode-button").forEach((button) => {
+        button.addEventListener("click", () => setMode(button.dataset.mode));
+      });
+
+      inputEl.addEventListener("compositionstart", () => { composing = true; });
+      inputEl.addEventListener("compositionend", () => {
+        composing = false;
+        checkInput();
+      });
+      inputEl.addEventListener("input", checkInput);
+
+      document.addEventListener("keydown", (event) => {
+        if (document.activeElement === inputEl && !completed && (event.key.length === 1 || event.key === "Backspace")) {
+          stats.totalTaps += 1;
+          saveStats();
+          renderStats();
+        }
+        const keyName = event.key === "Spacebar" ? " " : event.key.toLowerCase();
+        const keyEl = [...keyboardEl.querySelectorAll(".key")].find((el) => el.dataset.key === keyName);
+        if (keyEl) {
+          keyEl.classList.add("pressed");
+          window.setTimeout(() => keyEl.classList.remove("pressed"), 100);
+        }
+      });
+
+      nextButton.addEventListener("click", chooseLesson);
+
+      buildKeyboard();
+      renderStats();
+      chooseLesson();
+    })();
+  </script>
+</body>
+</html>
