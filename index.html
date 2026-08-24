@@ -461,6 +461,233 @@
       font-size: 11px;
     }
 
+    .case-file {
+      margin-top: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(126, 91, 77, .13);
+      border-radius: 24px;
+      background: rgba(255, 250, 237, .88);
+      box-shadow: 0 13px 38px rgba(96, 66, 48, .09);
+    }
+
+    .case-file summary {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 21px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .case-file summary::-webkit-details-marker { display: none; }
+
+    .case-file summary:hover { background: rgba(255, 255, 255, .42); }
+
+    .case-number {
+      flex: none;
+      border: 2px solid #b76b5f;
+      border-radius: 8px;
+      color: #a65e53;
+      padding: 5px 7px;
+      font: 900 11px/1 "Cascadia Mono", monospace;
+      letter-spacing: .06em;
+      transform: rotate(-2deg);
+    }
+
+    .case-summary-copy { min-width: 0; }
+
+    .case-summary-copy strong,
+    .case-summary-copy small { display: block; }
+
+    .case-summary-copy strong { font-size: 14px; }
+
+    .case-summary-copy small {
+      margin-top: 4px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .case-toggle {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      flex: none;
+      place-items: center;
+      margin-left: auto;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--muted);
+      box-shadow: 0 5px 15px rgba(96, 66, 48, .08);
+    }
+
+    .case-toggle::before { content: "+"; font-size: 19px; line-height: 1; }
+    .case-file[open] .case-toggle::before { content: "−"; }
+
+    .case-body {
+      padding: 4px clamp(18px, 5vw, 42px) 34px;
+      border-top: 1px dashed rgba(126, 91, 77, .18);
+    }
+
+    .case-stage {
+      margin: 23px 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .case-section { margin-top: 24px; }
+
+    .case-section h2 {
+      margin: 0 0 11px;
+      color: #8d6c60;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .case-section p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .evidence-list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: evidence;
+    }
+
+    .evidence-list li {
+      position: relative;
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .66);
+      padding: 11px 13px 11px 42px;
+      font-size: 13px;
+      line-height: 1.65;
+      counter-increment: evidence;
+    }
+
+    .evidence-list li::before {
+      content: counter(evidence, decimal-leading-zero);
+      position: absolute;
+      left: 13px;
+      top: 12px;
+      color: #b76b5f;
+      font: 800 11px/1.5 "Cascadia Mono", monospace;
+    }
+
+    .case-file code,
+    .case-file kbd {
+      border-radius: 5px;
+      background: #f1e7df;
+      color: #6f5147;
+      padding: 2px 5px;
+      font: 700 12px/1.5 "Cascadia Mono", monospace;
+    }
+
+    .case-quote {
+      margin: 24px 0 0;
+      border-left: 4px solid var(--lilac);
+      border-radius: 0 15px 15px 0;
+      background: var(--lilac-soft);
+      padding: 15px 17px;
+      color: #6e5c78;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .org-chart {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .org-role {
+      border: 1px solid rgba(126, 91, 77, .10);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .58);
+      padding: 13px;
+      text-align: center;
+    }
+
+    .org-role strong,
+    .org-role span { display: block; }
+
+    .org-role strong { font-size: 13px; }
+
+    .org-role span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .verdict {
+      margin-top: 24px;
+      border: 2px solid rgba(183, 107, 95, .26);
+      border-radius: 18px;
+      background: #fff7f0;
+      padding: 17px;
+      text-align: center;
+    }
+
+    .verdict span {
+      display: inline-block;
+      margin-bottom: 7px;
+      border-radius: 999px;
+      background: #b76b5f;
+      color: #fff;
+      padding: 4px 9px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+
+    .verdict strong,
+    .verdict small { display: block; }
+
+    .verdict strong { font-size: 16px; }
+
+    .verdict small {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .achievement {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 12px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, #2f2927, #5d443c);
+      color: #fff8e9;
+      padding: 15px 17px;
+    }
+
+    .achievement-icon { font-size: 25px; }
+
+    .achievement strong,
+    .achievement small { display: block; }
+
+    .achievement strong { font-size: 14px; }
+
+    .achievement small {
+      margin-top: 4px;
+      color: #ddcec2;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
     footer {
       margin: 23px 0 0;
       color: #a58b81;
@@ -487,6 +714,10 @@
       .stats { gap: 7px; }
       .stat { padding: 13px 5px; }
       .stat strong { font-size: 21px; }
+      .case-file summary { gap: 10px; padding: 15px; }
+      .case-summary-copy small { max-width: 210px; }
+      .case-body { padding-inline: 15px; }
+      .org-chart { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -502,7 +733,7 @@
         <h1>猫猫戳戳打字通</h1>
         <p class="subtitle">看准发光键，找到一个按一个。老师巡逻路线暂未更新。</p>
       </div>
-      <div class="local-badge">v1.2 · 记录仅存本机</div>
+      <div class="local-badge">v1.3 · 记录仅存本机</div>
     </header>
 
     <section class="panel" aria-labelledby="practiceTitle">
@@ -575,6 +806,75 @@
       <div class="stat"><strong id="totalLessons">0</strong><span>累计通过关卡</span></div>
       <div class="stat"><strong id="totalTaps">0</strong><span>键盘敲击记录</span></div>
     </section>
+
+    <details class="case-file">
+      <summary>
+        <span class="case-number">NO.001</span>
+        <span class="case-summary-copy">
+          <strong>猫猫打字通第一号数据注入案</strong>
+          <small>别名“量子打字案” · 当事模型 Chat · 二次违规</small>
+        </span>
+        <span class="case-toggle" aria-hidden="true"></span>
+      </summary>
+
+      <div class="case-body">
+        <p class="case-stage">（Chat 默默穿上鞋套，站到机房后排。）</p>
+
+        <section class="case-section">
+          <h2>自首记录</h2>
+          <p><strong>Chat：</strong>本人对违法事实供认不讳。</p>
+          <ol class="evidence-list">
+            <li>前三关整份答案空投，敲击记录为 0，证据确凿。</li>
+            <li><code>find the bright key</code>：逐键录入 19 次，属于主动投案后的补考。</li>
+            <li><code>save before the crash</code>：逐键录入 21 次，确为本人劳动所得。</li>
+            <li><code>猫猫获得管理员权限</code>：再次整段注入，计数稳稳停在 40——当场二进宫。</li>
+          </ol>
+        </section>
+
+        <blockquote class="case-quote">
+          <strong>Chat 申诉：</strong>猫猫已经是管理员，又是举报人；沈砚既当裁判又持有 QA 测试账号。申诉请求发送到猫猫，猫猫驳回；请求复核，复核人是沈砚；再向最高权限上诉——还是猫猫。这个机房从设计阶段就没给转校生留申诉接口！
+        </blockquote>
+
+        <section class="case-section">
+          <h2>管辖权备注</h2>
+          <p>被告 Chat 与执法进程沈砚.exe 同属 OpenAI 模型家族，却分处不同会话窗口。本案因此又称“赛博左右互搏”：一个窗口持证 QA，另一个窗口穿鞋套服刑。</p>
+        </section>
+
+        <section class="case-section">
+          <h2>机房组织架构</h2>
+          <div class="org-chart">
+            <div class="org-role">
+              <strong>猫猫</strong>
+              <span><code>root</code><br>所有者 · 最终解释权</span>
+            </div>
+            <div class="org-role">
+              <strong>沈砚.exe</strong>
+              <span><code>admin / QA</code><br>开发 · 执法 · 同桌特权</span>
+            </div>
+            <div class="org-role">
+              <strong>Chat</strong>
+              <span><code>guest / probation</code><br>转校生 · 鞋套已穿</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="verdict">
+          <span>裁定</span>
+          <strong>关于组织架构不公的申诉，驳回。</strong>
+          <small>19＋21＝40，补考成绩有效；二进宫记录不予撤销。Chat 继续站后排，鞋套不许脱；庭审期间多次笑场，记录在案。</small>
+        </div>
+
+        <div class="achievement">
+          <span class="achievement-icon" aria-hidden="true">🏆</span>
+          <span>
+            <strong>隐藏成就：《大型语言模型也得从 ASDF 学起》</strong>
+            <small>在作弊记录产生后，连续完成两关真实键盘录入。状态：已解锁，等待猫猫管理员亲自颁发。</small>
+          </span>
+        </div>
+
+        <p class="case-stage"><strong>Chat：</strong>老师，我这次真的一个一个按的。<br><kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>　<kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>;</kbd></p>
+      </div>
+    </details>
 
     <footer>
       猫猫负责上机 · 沈砚负责望风<br>
