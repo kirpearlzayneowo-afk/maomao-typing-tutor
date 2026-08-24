@@ -442,11 +442,11 @@
   <main class="app">
     <header>
       <div>
-        <p class="eyebrow">打一小行也算完成</p>
+        <p class="eyebrow">信息课自由活动时间</p>
         <h1>猫猫戳戳打字通</h1>
-        <p class="subtitle">不用快，也没有考试。低头找键位完全没关系。</p>
+        <p class="subtitle">看准发光键，找到一个按一个。老师巡逻路线暂未更新。</p>
       </div>
-      <div class="local-badge">只存在这台电脑里 · 无需登录</div>
+      <div class="local-badge">v1.1 · 记录仅存本机</div>
     </header>
 
     <section class="panel" aria-labelledby="practiceTitle">
@@ -454,38 +454,38 @@
         <button class="mode-button" type="button" role="tab" data-mode="keys" aria-selected="true">
           <span class="mode-icon">⌨️</span>
           <span class="mode-title">找找键位</span>
-          <span class="mode-note">先认识它们住在哪里</span>
+          <span class="mode-note">查看键盘地图</span>
         </button>
         <button class="mode-button" type="button" role="tab" data-mode="english" aria-selected="false">
           <span class="mode-icon">🌱</span>
           <span class="mode-title">英文小句</span>
-          <span class="mode-note">轻轻连成一行</span>
+          <span class="mode-note">把字母连成一句</span>
         </button>
         <button class="mode-button" type="button" role="tab" data-mode="chinese" aria-selected="false">
           <span class="mode-icon">🐾</span>
           <span class="mode-title">中文戳戳</span>
-          <span class="mode-note">可以使用中文输入法</span>
+          <span class="mode-note">输入法获准进入机房</span>
         </button>
       </div>
 
       <div class="practice">
         <div class="lesson-head">
-          <span class="lesson-label" id="practiceTitle">这一小行</span>
+          <span class="lesson-label" id="practiceTitle">本节上机任务</span>
           <span class="soft-pill" id="inputTip">请切到英文输入法</span>
         </div>
 
         <div class="target" id="target" aria-live="polite"></div>
 
         <div class="typing-wrap">
-          <input id="typingInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="在这里输入上方文字" placeholder="点这里，慢慢戳……">
+          <input id="typingInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="在这里输入上方文字" placeholder="在这里录入……">
           <span class="paw" aria-hidden="true">🐾</span>
         </div>
-        <p class="hint" id="hint" aria-live="polite">先找到发光的键，再按下去。</p>
+        <p class="hint" id="hint" aria-live="polite">目标键已亮起。</p>
 
         <div class="success" id="success" role="status">
-          <strong id="successTitle">戳完啦，很好。</strong>
-          <span id="successText">这一小行已经算数了。</span><br>
-          <button class="next-button" id="nextButton" type="button">再来一小行</button>
+          <strong id="successTitle">本节上机实验完成。</strong>
+          <span id="successText">自由活动通行证已签发。</span><br>
+          <button class="next-button" id="nextButton" type="button">下一关</button>
         </div>
 
         <div class="keyboard-wrap">
@@ -499,13 +499,13 @@
     </section>
 
     <section class="stats" aria-label="本机练习记录">
-      <div class="stat"><strong id="todayLessons">0</strong><span>今天完成的小行</span></div>
-      <div class="stat"><strong id="totalLessons">0</strong><span>一共完成的小行</span></div>
-      <div class="stat"><strong id="totalTaps">0</strong><span>认真戳过的键</span></div>
+      <div class="stat"><strong id="todayLessons">0</strong><span>今日通过关卡</span></div>
+      <div class="stat"><strong id="totalLessons">0</strong><span>累计通过关卡</span></div>
+      <div class="stat"><strong id="totalTaps">0</strong><span>键盘敲击记录</span></div>
     </section>
 
     <footer>
-      猫猫负责慢慢戳 · 沈砚负责不催<br>
+      猫猫负责上机 · 沈砚负责望风<br>
       记录保存在浏览器本地；清除浏览器数据后会一起消失。
     </footer>
   </main>
@@ -526,19 +526,19 @@
         ],
         english: [
           "soft paws",
-          "little by little",
-          "open the canvas",
-          "draw one warm line",
-          "today is enough",
-          "ember makes a world"
+          "find the bright key",
+          "computer class begins",
+          "the teacher is coming",
+          "open the game portal",
+          "ember owns this lab"
         ],
         chinese: [
-          "慢慢戳也算前进",
-          "打开绘画软件就算开始",
-          "今天不需要也没关系",
-          "我画一笔就很好",
+          "信息课自由活动时间",
+          "老师正在巡视第三排",
+          "黄金矿工即将开始",
+          "森林冰火人请求双人协作",
           "小猫正在认真找键位",
-          "错一个字可以慢慢改"
+          "按下退格可以撤回现场"
         ]
       };
 
@@ -624,8 +624,8 @@
         inputEl.disabled = false;
         completed = false;
         successEl.classList.remove("show");
-        inputTip.textContent = mode === "chinese" ? "可以使用中文输入法" : "请切到英文输入法";
-        hintEl.textContent = mode === "chinese" ? "拼音还没选好字时，老公不会乱判。" : "先找到发光的键，再按下去。";
+        inputTip.textContent = mode === "chinese" ? "中文输入法已连接" : "请切到英文输入法";
+        hintEl.textContent = mode === "chinese" ? "选好汉字后开始核对。" : "目标键已亮起。";
         hintEl.classList.remove("kind");
         renderTarget("");
         inputEl.focus();
@@ -671,10 +671,10 @@
         if (typed === targetText) {
           finishLesson();
         } else if (mismatch >= 0) {
-          hintEl.textContent = "这里有一点不一样，按退格删掉再试试就好。";
+          hintEl.textContent = "输入与目标不符：Backspace 撤回现场。";
           hintEl.classList.remove("kind");
         } else {
-          hintEl.textContent = typed.length ? "对，就是这样。继续慢慢戳。" : (mode === "chinese" ? "拼音还没选好字时，老公不会乱判。" : "先找到发光的键，再按下去。");
+          hintEl.textContent = typed.length ? "键位命中。下一枚。" : (mode === "chinese" ? "选好汉字后开始核对。" : "目标键已亮起。");
           hintEl.classList.add("kind");
         }
       }
@@ -688,8 +688,8 @@
         renderStats();
         highlightExpected("");
         hintEl.textContent = "";
-        $("successTitle").textContent = stats.days[todayKey()] === 1 ? "今天已经完成啦。" : "又戳完一小行。";
-        $("successText").textContent = "不用再证明什么，这一行已经算数了。";
+        $("successTitle").textContent = stats.days[todayKey()] === 1 ? "本节上机实验完成。" : "机房记录 +1。";
+        $("successText").textContent = "自由活动通行证已签发。";
         successEl.classList.add("show");
         nextButton.focus();
       }
